@@ -1,5 +1,8 @@
 <template>
-  <Background />
+  <div>
+    <router-view class="page"/>
+    <Background />
+  </div>
 </template>
 
 <script>
@@ -16,6 +19,10 @@ export default {
 <style>
 #app {
   font-family: Strait !important;
+}
+
+.page {
+  position: absolute;
 }
 
 :root{
