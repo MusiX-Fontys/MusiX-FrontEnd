@@ -10,6 +10,9 @@ import AlbumPage from '../pages/AlbumPage'
 import SongPage from '../pages/SongPage'
 import SearchPage from '../pages/SearchPage'
 
+//Import SpotifyWrapper
+import spotify from '../wrappers/SpotifyWrapper'
+
 //Define Routes
 const routes = [
     {
@@ -76,6 +79,14 @@ const routes = [
         meta: {
             requiresAuth: false
         }
+    },
+    {
+        path: '/authorized',
+        name: 'authorized',
+        component: HomePage,
+        meta: {
+            requiresAuth: true
+        }
     }
 ]
 
@@ -84,5 +95,79 @@ const router = createRouter({
     history: createWebHistory(process.env.BASE_URL), 
     routes
 })
+
+//Check before entering page
+router.beforeEach(async (to, from, next) => {
+
+    //Check expiration
+    if(localStorage.getItem('jwt') != null){
+        try{
+            const claims = parseJwt(localStorage.getItem("jwt"))
+            const isExpired = checkExpiration(claims["exp"])
+    
+            if(isExpired){
+              localStorage.removeItem("jwt")
+            }
+        }
+        catch{
+            localStorage.removeItem("jwt")
+        }
+    }
+
+    //AuthenticationState
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      if (localStorage.getItem('jwt') == null) {
+        next({
+          name: 'signin',
+          params: { nextUrl: to.fullPath }
+        })
+      } 
+      else {
+          next()
+      }
+    } 
+    else if (to.matched.some(record => record.meta.guest)) {
+      if (localStorage.getItem('jwt') == null) {
+        next()
+      } 
+      else {
+        next({ name: 'home' })
+      }
+    } 
+    else {
+      next()
+    }
+
+    //Spotify Authorization
+    if(to.name === 'authorized'){
+        const result = await spotify.getAccessToken(to.query.code)
+
+        const exp_time = new Date()
+        exp_time.setTime(exp_time.getTime() + result.exp_time * 1000)
+
+        localStorage.setItem('access_token', result.access_token)
+        localStorage.setItem('refresh_token', result.refresh_token)
+        localStorage.setItem('exp_time', exp_time.getTime())
+    }
+})
+
+//Get claims from JWT
+function parseJwt (token) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}
+
+//Check expiration date of JWT
+function checkExpiration (exp) {
+  const expDate = new Date(exp * 1000)
+  const currentDate = new Date()
+
+  return expDate.getTime() <= currentDate.getTime();
+}
 
 export default router
