@@ -7,11 +7,15 @@
 
 <script>
 import Background from "./components/Background.vue"
+import api from './wrappers/SpotifyWrapper'
 
 export default {
   name: 'App',
   components: {
     Background
+  },
+  async created(){
+    console.log(api.getAuthorizationUrl())
   }
 }
 </script>
