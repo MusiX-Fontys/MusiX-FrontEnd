@@ -29,13 +29,13 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm ci ./musix-frontend
     
     - name: Build project
-      run: npm run build --if-present
+      run: npm run build --if-present ./musix-frontend
     
     - name: Run tests
-      run: npm test -- --coverage
+      run: npm test -- --coverage .musix-front-end
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2.1.0
