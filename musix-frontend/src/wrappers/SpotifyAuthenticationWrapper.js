@@ -2,7 +2,13 @@ import axios from "axios";
 
 const client_id = process.env.VUE_APP_SPOTIFY_CLIENT_ID;
 const client_secret = process.env.VUE_APP_SPOTIFY_CLIENT_SECRET;
-const redirect_uri = process.env.VUE_APP_SPOTIFY_REDIRECT_URI;
+var redirect_uri = '';
+if(process.env.VUE_APP_RELEASE_TYPE === 'development'){
+  redirect_uri = process.env.VUE_APP_SPOTIFY_REDIRECT_URI_DEVELOPMENT;
+}
+else if(process.env.VUE_APP_RELEASE_TYPE === 'production'){
+  redirect_uri = process.env.VUE_APP_SPOTIFY_REDIRECT_URI_PRODUCTION;
+}
 
 const baseUrl = process.env.VUE_APP_API_BASE_URL;
 
