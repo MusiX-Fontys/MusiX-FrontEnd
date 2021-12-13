@@ -7,11 +7,13 @@ import SignInPage from '../pages/SignInPage'
 import ProfilePage from '../pages/ProfilePage'
 import ArtistPage from '../pages/ArtistPage'
 import AlbumPage from '../pages/AlbumPage'
-import SongPage from '../pages/SongPage'
+import TrackPage from '../pages/TrackPage'
 import SearchPage from '../pages/SearchPage'
+import AuthorizationPage from '../pages/AuthorizationPage'
 
-//Import SpotifyWrapper
-import spotify from '../wrappers/SpotifyWrapper'
+//Import Wrappers
+import spotify from '../wrappers/SpotifyAuthenticationWrapper'
+import scrobble from '../wrappers/ScrobbleWrapper'
 
 //Define Routes
 const routes = [
@@ -49,7 +51,7 @@ const routes = [
         }
     },
     {
-        path: '/artist',
+        path: '/artist/:id',
         name: 'artist',
         component: ArtistPage,
         meta: {
@@ -57,7 +59,7 @@ const routes = [
         }
     },
     {
-        path: '/album',
+        path: '/album/:id',
         name: 'album',
         component: AlbumPage,
         meta: {
@@ -65,15 +67,15 @@ const routes = [
         }
     },
     {
-        path: '/song',
-        name: 'song',
-        component: SongPage,
+        path: '/track/:id',
+        name: 'track',
+        component: TrackPage,
         meta: {
             requiresAuth: false
         }
     },
     {
-        path: '/search',
+        path: '/search/:search',
         name: 'search',
         component: SearchPage,
         meta: {
@@ -83,7 +85,7 @@ const routes = [
     {
         path: '/authorized',
         name: 'authorized',
-        component: HomePage,
+        component: AuthorizationPage,
         meta: {
             requiresAuth: true
         }
@@ -99,7 +101,7 @@ const router = createRouter({
 //Check before entering page
 router.beforeEach(async (to, from, next) => {
 
-    //Check expiration
+    //Check JWT expiration
     if(localStorage.getItem('jwt') != null){
         try{
             const claims = parseJwt(localStorage.getItem("jwt"))
@@ -123,7 +125,7 @@ router.beforeEach(async (to, from, next) => {
         })
       } 
       else {
-          next()
+        next()
       }
     } 
     else if (to.matched.some(record => record.meta.guest)) {
@@ -136,18 +138,29 @@ router.beforeEach(async (to, from, next) => {
     } 
     else {
       next()
+      scrobble.updateRecentlyPlayed()
+    }
+
+    //Check Spotify expiration
+    if(await spotify.hasUserSetUpSpotifyConnection() && to.name !== 'authorized'){
+        const isExpired = checkExpiration(localStorage.getItem('exp_time'))
+
+        if(isExpired){
+            localStorage.removeItem('access_token')
+            window.location.href = spotify.getAuthorizationUrl()
+        }
     }
 
     //Spotify Authorization
     if(to.name === 'authorized'){
         const result = await spotify.getAccessToken(to.query.code)
 
-        const exp_time = new Date()
-        exp_time.setTime(exp_time.getTime() + result.exp_time * 1000)
+        const exp_time = new Date((Date.now() + result.exp_time * 1000) / 1000)
 
         localStorage.setItem('access_token', result.access_token)
-        localStorage.setItem('refresh_token', result.refresh_token)
         localStorage.setItem('exp_time', exp_time.getTime())
+
+        router.push('profile')
     }
 })
 

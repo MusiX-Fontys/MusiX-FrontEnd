@@ -1,9 +1,9 @@
 <template>
     <div id="panel">
         <div id="top">
-            <img :src="album.image" id="profile-pic"/>
+            <img :src="track.image" id="profile-pic"/>
             <div id="top-right">
-                <label id="title">{{ this.album.name }}</label>
+                <label id="title">{{ this.track.name }}</label>
                 <button id="spotify" @click="redirectToSpotify">Open In Spotify<i class="icon fab fa-spotify"/></button>
             </div>
         </div>
@@ -12,56 +12,64 @@
                 <label class="header">Artists</label>
             </div>
             <div>
-                <AlbumArtist v-for="artist in album.artists" :key="artist.id"
+                <AlbumArtist v-for="artist in track.artists" :key="artist.id"
                 :id="artist.id" :name="artist.name" :image="artist.image"/>
             </div>
         </div>
         <div id="mid">
             <div class="album-header">                
-                <label class="header">Tracks</label>
+                <label class="header">Info</label>
             </div>
-            <div>
-                <AlbumTrack v-for="(track, index) in album.tracks" :key="track.id"
-                :id="track.id" :index="index + 1" :name="track.name" :duration="track.duration_ms"/>
+            <div id="info">
+                <label>Duration: <label>{{ getDuration() }} minutes</label></label>
+                <label>Release Date: <label>{{ track.release_date }}</label></label>
             </div>
         </div>
     </div>
 </template>
 <script>
 import AlbumArtist from '../components/album_components/AlbumArtist.vue'
-import AlbumTrack from '../components/album_components/AlbumTrack.vue'
 import Spotify from '../wrappers/SpotifyWrapper'
 
 export default {
     data() {
         return {
             id: '',
-            album: {}
+            track: {}
         }
     },
     components: {
-        AlbumArtist,
-        AlbumTrack
+        AlbumArtist
     },
-    created() {
-        this.getAlbumId()
-        this.getAlbumInfo()
+    async created() {
+        this.getTrackId()
+        await this.getTrackInfo()
     },
     methods: {
-        getAlbumId(){
+        getTrackId(){
             this.id = this.$route.params.id
         },
 
-        async getAlbumInfo(){
-            this.album = await Spotify.getAlbumInfo(this.id)
-            this.album.artists.forEach(async (artist) => {
+        async getTrackInfo(){
+            this.track = await Spotify.getTrackInfo(this.id)
+            this.track.artists.forEach(async (artist) => {
                 const response = await Spotify.getArtistInfo(artist.id)
                 artist.image = response.image
             })
         },
 
         redirectToSpotify(){
-            window.open(this.album.spotify)
+            window.open(this.track.spotify)
+        },
+
+        getDuration(){
+            var totalSeconds = (this.track.duration / 1000)
+            var minutes = Math.floor(totalSeconds / 60)
+            var seconds = Math.round(totalSeconds - (minutes * 60))
+            if(seconds < 10){
+                seconds = `0${seconds}`
+            }
+            return `${minutes}:${seconds}`
         }
     }
 }
@@ -71,9 +79,10 @@ export default {
         left: 0;
         right: 0;
         bottom: 0;
-        margin: 40px auto;
+        margin: auto;
         padding: 25px;
         width: 47.5vw;
+        max-height: fit-content;
         border-radius: 10px;
         background-color: var(--secondary-color);
         display: flex;
@@ -158,11 +167,13 @@ export default {
         margin-top: 10px;
     }
 
-    #tracks{
+    #info{
         display: flex;
+        flex-direction: column;
+        font-size: 1.4em;
     }
 
-    .track-list{
-        width: 50%;
-    }
+        #info label label{
+            color: var(--primary-color);
+        }
 </style>

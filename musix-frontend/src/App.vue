@@ -1,17 +1,38 @@
 <template>
   <div>
-    <router-view class="page"/>
+    <NavigationBar v-show="isNotSignInOrSignUpPage"/>
+    <router-view :class="{'other-page': isNotSignInOrSignUpPage,  'sign-in-or-up-page': !isNotSignInOrSignUpPage}" :key="this.$route.path"/>
     <Background />
   </div>
 </template>
 
 <script>
 import Background from "./components/Background.vue"
+import NavigationBar from './components/NavigationBar.vue'
 
 export default {
   name: 'App',
+  data() {
+    return { 
+      rerender: false
+    }
+  },
   components: {
-    Background
+    Background,
+    NavigationBar
+  },
+  computed: {
+    isNotSignInOrSignUpPage() {
+      if(this.$route.name !== 'signin' && this.$route.name !== 'signup'){
+        return true;
+      }
+      return false;
+    }
+  },
+  methods: {
+    rerenderPage(){
+      this.rerender != this.rerender
+    }
   }
 }
 </script>
@@ -21,13 +42,18 @@ export default {
   font-family: Strait !important;
 }
 
-.page {
+.sign-in-or-up-page{
   position: absolute;
+}
+
+.other-page {
+  position: absolute;
+  top: 75px;
 }
 
 :root{
   --primary-color: rgba(248, 38, 38, 1);
   --secondary-color: rgb(255, 255, 255, 1);
-  --text-color: rgb(0, 0, 0, 0.85);
+  --text-color: rgb(0, 0, 0, 1);
 }
 </style>

@@ -10,7 +10,7 @@ export default {
         var response;
 
         try{
-            response =  await axios.post(`${baseUrl}/api/Authentication`, data)
+            response =  await axios.post(`${baseUrl}/Authentication`, data)
 
             console.log(response)
 

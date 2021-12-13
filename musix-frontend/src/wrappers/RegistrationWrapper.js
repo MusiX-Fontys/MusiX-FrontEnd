@@ -10,7 +10,7 @@ export default {
         var response;
 
         try{
-            response =  await axios.post(`${baseUrl}/api/Registration`, data)
+            response =  await axios.post(`${baseUrl}/Registration`, data)
         }
         catch(error){
             response = error.response
