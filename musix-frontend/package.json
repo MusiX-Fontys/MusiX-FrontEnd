@@ -5,7 +5,7 @@
   "homepage": "https://musix-fontys.github.io/MusiX-FrontEnd/",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "node scripts/gh-pages-deploy.js",
+    "deploy": "node src/scripts/gh-pages-deploy.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
