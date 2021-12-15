@@ -2,7 +2,7 @@
   "name": "musix-frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://musix-fontys.github.io/MusiX-FrontEnd/",
+  "homepage": "https://musix-fontys.github.io/MusiX-FrontEnd",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
