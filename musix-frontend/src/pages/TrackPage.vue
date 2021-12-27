@@ -4,7 +4,7 @@
             <img :src="track.image" id="profile-pic"/>
             <div id="top-right">
                 <label id="title">{{ this.track.name }}</label>
-                <button id="spotify" @click="redirectToSpotify">Open In Spotify<i class="icon fab fa-spotify"/></button>
+                <button id="spotify" @click="redirectToSpotify">Open In Spotify<em class="icon fab fa-spotify"/></button>
             </div>
         </div>
         <div id="mid">

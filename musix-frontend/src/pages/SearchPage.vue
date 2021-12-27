@@ -7,7 +7,7 @@
             <h1 :class="this.searchType === 'user' ? 'nav-item-selected' : 'nav-item'" @click="selectSearchType('user')">Users</h1>
         </div>
         <div id="search">
-            <h1 id="search-text">Results for <b>"{{ this.search }}"</b>:</h1>
+            <h1 id="search-text">Results for <strong>"{{ this.search }}"</strong>:</h1>
             <div v-if="this.searchType === 'artist' && !this.isSearching" id="search-results">
                 <Artist v-for="artist in results" :key="artist.id"
                 :id="artist.id" :name="artist.name" :image="artist.images.length ? artist.images[artist.images.length - 1].url : undefined" :genres="artist.genres"/>
@@ -25,9 +25,9 @@
                 :id="user.id" :name="user.username" :image="user.image" :joinDate="new Date(user.joinDate)"/>
             </div>
             <div id="search-pages">
-                <i @click="this.page !== 1 ? changePage(false) : null" :class="this.page !== 1 ? 'page-direction fas fa-angle-left' : 'fas fa-angle-left'" />
+                <em @click="this.page !== 1 ? changePage(false) : null" :class="this.page !== 1 ? 'page-direction fas fa-angle-left' : 'fas fa-angle-left'" />
                 <label id="search-page">{{ this.page }}</label>
-                <i @click="this.page + 1 <= this.maxPages ? changePage(true) : null" :class="this.page + 1 <= this.maxPages ? 'page-direction fas fa-angle-right' : 'fas fa-angle-right'" />
+                <em @click="this.page + 1 <= this.maxPages ? changePage(true) : null" :class="this.page + 1 <= this.maxPages ? 'page-direction fas fa-angle-right' : 'fas fa-angle-right'" />
             </div>
         </div>
     </div>

@@ -1,7 +1,7 @@
 <template>
     <div id="most-popular">
         <div v-if="!artists.length && !albums.length && !tracks.length" id="loading">
-            <i class="icon fas fa-spinner"/>Loading...
+            <em class="icon fas fa-spinner"/>Loading...
         </div>
         <PopularArtists v-if="artists.length" :artists="artists"/>
         <PopularAlbums v-if="albums.length" :albums="albums"/>

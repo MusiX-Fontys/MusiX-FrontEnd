@@ -1,10 +1,10 @@
 <template>
     <div id="panel">
         <div id="top">
-            <img :src="album.image" id="profile-pic"/>
+            <img :src="album.image" id="profile-pic" alt=""/>
             <div id="top-right">
                 <label id="title">{{ this.album.name }}</label>
-                <button id="spotify" @click="redirectToSpotify">Open In Spotify<i class="icon fab fa-spotify"/></button>
+                <button id="spotify" @click="redirectToSpotify">Open In Spotify<em class="icon fab fa-spotify"/></button>
             </div>
         </div>
         <div id="mid">

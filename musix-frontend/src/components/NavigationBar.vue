@@ -2,8 +2,8 @@
     <div class="navigation-bar">
         <div class="nav-side">
             <span class="logo fa-stack fa-2x" @click="redirectToPage('/home')">
-                <i class="logo-back fas fa-square fa-stack-2x" />
-                <i class="logo-front fas fa-compact-disc fa-stack-1x" />
+                <em class="logo-back fas fa-square fa-stack-2x" />
+                <em class="logo-front fas fa-compact-disc fa-stack-1x" />
             </span>
             <h1 class="title">MusiX</h1>
         </div>

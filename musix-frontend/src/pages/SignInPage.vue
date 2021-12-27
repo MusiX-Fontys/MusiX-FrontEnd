@@ -2,19 +2,19 @@
     <div class="panel">
         <div class="top-section">
             <span class="logo fa-stack fa-2x">
-                <i class="logo-back fas fa-square fa-stack-2x" />
-                <i class="logo-front fas fa-compact-disc fa-stack-1x" />
+                <em class="logo-back fas fa-square fa-stack-2x" />
+                <em class="logo-front fas fa-compact-disc fa-stack-1x" />
             </span>
             <h1 class="title">MusiX</h1>
         </div>
         <div class="section">
             <div class="input">
-                <i class="icon fas fa-envelope"/>
+                <em class="icon fas fa-envelope"/>
                 <div class="line" />
                 <input v-model="email" class="input-field" placeholder="Email"/>
             </div>
             <div class="input">
-                <i class="icon fas fa-lock"/>
+                <em class="icon fas fa-lock"/>
                 <div class="line" />
                 <input v-model="password" type="password" class="input-field" placeholder="Password"/>
             </div>
@@ -160,7 +160,7 @@ export default {
     }
 
     .input-field{
-        font-family: Strait;
+        font-family: Strait, sans-serif;
         padding: 20px;
         font-weight: 400;
         font-style: normal;
@@ -195,7 +195,7 @@ export default {
     .btn{
         width: 50%;
         height: 50px;
-        font-family: Strait;
+        font-family: Strait, sans-serif;
         padding: 20px;
         font-weight: 400;
         font-style: normal;

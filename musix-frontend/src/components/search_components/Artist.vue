@@ -1,6 +1,6 @@
 <template>
     <div id="component" @click="redirectToArtist">
-        <img v-if="this.image" :src="image"/>
+        <img v-if="this.image" :src="image" alt=""/>
         <div v-else id="placeholder">[NO IMAGE]</div>
         <div id="content">
             <h1>{{ name }}</h1>

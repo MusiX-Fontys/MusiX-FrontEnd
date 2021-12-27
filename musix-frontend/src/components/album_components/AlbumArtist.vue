@@ -1,6 +1,6 @@
 <template>
     <div id="item" @click="redirectToArtist()">
-        <img :src="image"/>
+        <img :src="image" alt=""/>
         <label id="name">{{ name }}</label>
     </div>
 </template>
