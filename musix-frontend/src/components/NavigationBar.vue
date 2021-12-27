@@ -40,7 +40,6 @@ export default {
 
             this.$router.push(`/search/${this.search}`)
             this.resetValues()
-            this.$root.rerenderPage()
         },
         handelLogOut() {
             localStorage.removeItem('jwt')

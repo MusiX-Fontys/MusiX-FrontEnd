@@ -12,11 +12,6 @@ import NavigationBar from './components/NavigationBar.vue'
 
 export default {
   name: 'App',
-  data() {
-    return { 
-      rerender: false
-    }
-  },
   components: {
     Background,
     NavigationBar
@@ -27,11 +22,6 @@ export default {
         return true;
       }
       return false;
-    }
-  },
-  methods: {
-    rerenderPage(){
-      this.rerender != this.rerender
     }
   }
 }
