@@ -1,4 +1,5 @@
 import axios from "axios";
+import TimeUtil from "../utils/TimeUtil";
 
 const baseUrl = process.env.VUE_APP_SPOTIFY_API_BASE_URL;
 
@@ -15,7 +16,14 @@ export default {
     async getRecentlyPlayed(limit){
         try{
             const response =  await axios.get(`${baseUrl}/me/player/recently-played?limit=${limit}`, this.getHeaders())
-            return response.data["items"]
+            var items = response.data["items"]
+
+            items.forEach(item => 
+                {
+                    item.played_at = TimeUtil.getTimeDifference(item.played_at)
+                })
+
+            return items
         }
         catch(error){
             console.log(error.response)

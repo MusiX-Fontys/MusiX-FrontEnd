@@ -13,8 +13,7 @@ export default {
         }
     },
 
-    async updateRecentlyPlayed(){
-
+    updateRecentlyPlayed(){
         try{
             axios.get(`${baseUrl}/Spotify/recently-played`, this.getHeaders())
         }
@@ -62,6 +61,57 @@ export default {
 
         try{
             response =  await axios.get(`${baseUrl}/Scrobble/popular-tracks`, this.getHeaders())
+        }
+        catch(error){
+            response = error.response
+        }
+        
+        return {
+            success: response.data["success"],
+            message: response.data["message"],
+            tracks: response.data["data"]["tracks"]
+        }
+    },
+
+    async getUserScrobbledArtists(user, from, to){
+        var response;
+
+        try{
+            response =  await axios.get(`${baseUrl}/Scrobble/${user}/artists?from=${from}&to=${to}`)
+        }
+        catch(error){
+            response = error.response
+        }
+        
+        return {
+            success: response.data["success"],
+            message: response.data["message"],
+            artists: response.data["data"]["artists"]
+        }
+    },
+
+    async getUserScrobbledAlbums(user, from, to){
+        var response;
+
+        try{
+            response =  await axios.get(`${baseUrl}/Scrobble/${user}/albums?from=${from}&to=${to}`)
+        }
+        catch(error){
+            response = error.response
+        }
+        
+        return {
+            success: response.data["success"],
+            message: response.data["message"],
+            albums: response.data["data"]["albums"]
+        }
+    },
+
+    async getUserScrobbledTracks(user, from, to){
+        var response;
+
+        try{
+            response =  await axios.get(`${baseUrl}/Scrobble/${user}/tracks?from=${from}&to=${to}`)
         }
         catch(error){
             response = error.response

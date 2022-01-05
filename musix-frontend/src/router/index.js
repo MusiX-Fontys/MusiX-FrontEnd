@@ -43,11 +43,11 @@ const routes = [
         }
     },
     {
-        path: '/profile',
+        path: '/profile/:id',
         name: 'profile',
         component: ProfilePage,
         meta: {
-            requiresAuth: false
+            requiresAuth: true
         }
     },
     {
@@ -55,7 +55,7 @@ const routes = [
         name: 'artist',
         component: ArtistPage,
         meta: {
-            requiresAuth: false
+            requiresAuth: true
         }
     },
     {
@@ -63,7 +63,7 @@ const routes = [
         name: 'album',
         component: AlbumPage,
         meta: {
-            requiresAuth: false
+            requiresAuth: true
         }
     },
     {
@@ -71,7 +71,7 @@ const routes = [
         name: 'track',
         component: TrackPage,
         meta: {
-            requiresAuth: false
+            requiresAuth: true
         }
     },
     {
@@ -79,7 +79,7 @@ const routes = [
         name: 'search',
         component: SearchPage,
         meta: {
-            requiresAuth: false
+            requiresAuth: true
         }
     },
     {
@@ -126,6 +126,7 @@ router.beforeEach(async (to, from, next) => {
       } 
       else {
         next()
+        scrobble.updateRecentlyPlayed()
       }
     } 
     else if (to.matched.some(record => record.meta.guest)) {
@@ -138,7 +139,6 @@ router.beforeEach(async (to, from, next) => {
     } 
     else {
       next()
-      scrobble.updateRecentlyPlayed()
     }
 
     //Check Spotify expiration
@@ -160,7 +160,7 @@ router.beforeEach(async (to, from, next) => {
         localStorage.setItem('access_token', result.access_token)
         localStorage.setItem('exp_time', exp_time.getTime())
 
-        router.push('profile')
+        router.push('home')
     }
 })
 

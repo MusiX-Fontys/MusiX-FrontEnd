@@ -12,7 +12,7 @@
                 <input class="search" v-model="search" placeholder="Search..."/>
             </form>
             <div v-if="isUserLoggedIn()">
-                <label class="nav-option" @click="redirectToPage('/profile')">Profile</label>
+                <label class="nav-option" @click="redirectToPage(`/profile/${getUserId()}`)">Profile</label>
                 <label class="nav-option" @click="handelLogOut()">Log Out</label>
             </div>
             <div v-else>
@@ -24,16 +24,24 @@
 </template>
 
 <script>
+import JwtUtil from '../utils/JwtUtil'
+
 export default {
     name: 'NavigationBar',
     data(){
         return{
-            search: ''
+            search: '',
+            userId: ''
         }
     },
     methods: {
         isUserLoggedIn(){
             return localStorage.getItem('jwt') !== null
+        },
+        getUserId(){
+            const jwt = localStorage.getItem('jwt')
+            const claims = JwtUtil.parseJwt(jwt)
+            return claims.sub
         },
         handleSearch(e){
             e.preventDefault()
