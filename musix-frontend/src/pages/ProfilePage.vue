@@ -75,12 +75,19 @@
                 <ScrobbledItems :items="tracks.slice(0, 5)" :type="'track'"/>
             </div>
         </div>
+        <div>
+            <div class="album-header"><label class="header">Comment Section</label></div>
+            <div class="albums">
+                <CommentSection :id="id" :comments="user.comments"/>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 import Favorite from '../components/profile_components/Favorite.vue'
 import RecentlyPlayed from '../components/profile_components/RecentlyPlayed.vue'
 import ScrobbledItems from '../components/profile_components/ScrobbledItems.vue'
+import CommentSection from '../components/profile_components/CommentSection.vue'
 import ProfileWrapper from '../wrappers/ProfileWrapper'
 import SpotifyWrapper from '../wrappers/SpotifyWrapper'
 import ScrobbleWrapper from '../wrappers/ScrobbleWrapper'
@@ -109,7 +116,8 @@ export default {
     components: {
         Favorite,
         RecentlyPlayed,
-        ScrobbledItems
+        ScrobbledItems,
+        CommentSection
     },
     async created(){
         this.getUserId()

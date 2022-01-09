@@ -11,8 +11,6 @@ export default {
         try{
             response =  await axios.post(`${baseUrl}/Authentication`, data)
 
-            console.log(response)
-
             return {
                 success: response.data["success"],
                 token: response.data["data"]["token"]
