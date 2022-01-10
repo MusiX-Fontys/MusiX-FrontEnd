@@ -46,7 +46,6 @@ jobs:
       uses: foo-software/lighthouse-check-action@master
       with:
         urls: 'https://musix-fontys.github.io/MusiX-FrontEnd/home,https://musix-fontys.github.io/MusiX-FrontEnd/signup,https://musix-fontys.github.io/MusiX-FrontEnd/signin,https://musix-fontys.github.io/MusiX-FrontEnd/profile/77f9c419-e9f0-4d48-8d1e-5d0cbee36801,https://musix-fontys.github.io/MusiX-FrontEnd/artist/6l3HvQ5sa6mXTsMTB19rO5,https://musix-fontys.github.io/MusiX-FrontEnd/album/7viNUmZZ8ztn2UB4XB3jIL,https://musix-fontys.github.io/MusiX-FrontEnd/track/3XzSOIE6zGLliuqsVGLmUc,https://musix-fontys.github.io/MusiX-FrontEnd/search/test,https://musix-fontys.github.io/MusiX-FrontEnd/authorized'
-
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2.1.0
