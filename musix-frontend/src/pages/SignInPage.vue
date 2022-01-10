@@ -28,6 +28,7 @@
 
 <script>
 import api from "../wrappers/AuthenticationWrapper.js"
+import spotify from "../wrappers/SpotifyAuthenticationWrapper"
 
 export default {
     data() {
@@ -54,6 +55,11 @@ export default {
 
             if(response.success){
                 localStorage.setItem('jwt', response.token)
+
+                //Check Spotify expiration
+                if(!await spotify.hasUserSetUpSpotifyConnection()){
+                    window.location.href = spotify.getAuthorizationUrl()
+                }
 
                 if(this.$route.params.nextUrl != null) {
                     this.$router.push(this.$route.params.nextUrl)

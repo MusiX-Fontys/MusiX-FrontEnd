@@ -15,6 +15,8 @@ import AuthorizationPage from '../pages/AuthorizationPage'
 import spotify from '../wrappers/SpotifyAuthenticationWrapper'
 import scrobble from '../wrappers/ScrobbleWrapper'
 
+import JwtUtil from "../utils/JwtUtil"
+
 //Define Routes
 const routes = [
     {
@@ -43,11 +45,11 @@ const routes = [
         }
     },
     {
-        path: '/profile',
+        path: '/profile/:id',
         name: 'profile',
         component: ProfilePage,
         meta: {
-            requiresAuth: false
+            requiresAuth: true
         }
     },
     {
@@ -55,7 +57,7 @@ const routes = [
         name: 'artist',
         component: ArtistPage,
         meta: {
-            requiresAuth: false
+            requiresAuth: true
         }
     },
     {
@@ -63,7 +65,7 @@ const routes = [
         name: 'album',
         component: AlbumPage,
         meta: {
-            requiresAuth: false
+            requiresAuth: true
         }
     },
     {
@@ -71,7 +73,7 @@ const routes = [
         name: 'track',
         component: TrackPage,
         meta: {
-            requiresAuth: false
+            requiresAuth: true
         }
     },
     {
@@ -79,7 +81,7 @@ const routes = [
         name: 'search',
         component: SearchPage,
         meta: {
-            requiresAuth: false
+            requiresAuth: true
         }
     },
     {
@@ -104,8 +106,8 @@ router.beforeEach(async (to, from, next) => {
     //Check JWT expiration
     if(localStorage.getItem('jwt') != null){
         try{
-            const claims = parseJwt(localStorage.getItem("jwt"))
-            const isExpired = checkExpiration(claims["exp"])
+            const claims = JwtUtil.parseJwt(localStorage.getItem("jwt"))
+            const isExpired = JwtUtil.checkExpiration(claims["exp"])
     
             if(isExpired){
               localStorage.removeItem("jwt")
@@ -126,6 +128,7 @@ router.beforeEach(async (to, from, next) => {
       } 
       else {
         next()
+        scrobble.updateRecentlyPlayed()
       }
     } 
     else if (to.matched.some(record => record.meta.guest)) {
@@ -138,12 +141,11 @@ router.beforeEach(async (to, from, next) => {
     } 
     else {
       next()
-      scrobble.updateRecentlyPlayed()
     }
 
     //Check Spotify expiration
     if(await spotify.hasUserSetUpSpotifyConnection() && to.name !== 'authorized'){
-        const isExpired = checkExpiration(localStorage.getItem('exp_time'))
+        const isExpired = JwtUtil.checkExpiration(localStorage.getItem('exp_time'))
 
         if(isExpired){
             localStorage.removeItem('access_token')
@@ -160,27 +162,8 @@ router.beforeEach(async (to, from, next) => {
         localStorage.setItem('access_token', result.access_token)
         localStorage.setItem('exp_time', exp_time.getTime())
 
-        router.push('profile')
+        router.push('home')
     }
 })
-
-//Get claims from JWT
-function parseJwt (token) {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-
-  return JSON.parse(jsonPayload);
-}
-
-//Check expiration date of JWT
-function checkExpiration (exp) {
-  const expDate = new Date(exp * 1000)
-  const currentDate = new Date()
-
-  return expDate.getTime() <= currentDate.getTime();
-}
 
 export default router

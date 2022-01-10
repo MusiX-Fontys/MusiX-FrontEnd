@@ -13,7 +13,6 @@
 import PopularArtists from '../components/home_components/PopularArtists.vue'
 import PopularAlbums from '../components/home_components/PopularAlbums.vue'
 import PopularTracks from '../components/home_components/PopularTracks.vue'
-import spotify from '../wrappers/SpotifyWrapper'
 import ScrobbleWrapper from '../wrappers/ScrobbleWrapper'
 
 export default {
@@ -29,31 +28,12 @@ export default {
         PopularAlbums,
         PopularTracks
     },
-    async created(){
-        this.test()
+    created(){
         this.getMostPopularArtists()
         this.getMostPopularAlbums()
         this.getMostPopularTracks()
     },
     methods: {
-        async test(){
-            const current = await spotify.getCurrentlyPlaying()
-            var lastPlayed;
-
-            if(current !== null){
-                lastPlayed = await spotify.getRecentlyPlayed(9)
-                lastPlayed.unshift(current)
-            }
-            else{
-                lastPlayed = await spotify.getRecentlyPlayed(10)
-            }
-
-            console.log(lastPlayed)
-
-            const response = await spotify.getArtistTopTracks('6l3HvQ5sa6mXTsMTB19rO5')
-            console.log(response)
-        },
-
         async getMostPopularArtists(){
             const response = await ScrobbleWrapper.getMostPopularArtists()
 

@@ -8,12 +8,12 @@
             <h1 class="title">MusiX</h1>
         </div>
         <div class="nav-side">
-            <form @submit="handleSearch">
+            <form @submit.prevent="handleSearch">
                 <input class="search" v-model="search" placeholder="Search..."/>
             </form>
             <div v-if="isUserLoggedIn()">
-                <label class="nav-option" @click="redirectToPage('/profile')">Profile</label>
-                <label class="nav-option" @click="handelLogOut()">Log Out</label>
+                <label class="nav-option" @click="redirectToPage(`/profile/${getUserId()}`)">Profile</label>
+                <label class="nav-option" @click="handleLogOut()">Log Out</label>
             </div>
             <div v-else>
                 <label class="nav-option" @click="redirectToPage('/signin')">Sign In</label>
@@ -24,24 +24,30 @@
 </template>
 
 <script>
+import JwtUtil from '../utils/JwtUtil'
+
 export default {
     name: 'NavigationBar',
     data(){
         return{
-            search: ''
+            search: '',
+            userId: ''
         }
     },
     methods: {
         isUserLoggedIn(){
             return localStorage.getItem('jwt') !== null
         },
-        handleSearch(e){
-            e.preventDefault()
-
+        getUserId(){
+            const jwt = localStorage.getItem('jwt')
+            const claims = JwtUtil.parseJwt(jwt)
+            return claims.sub
+        },
+        handleSearch(){
             this.$router.push(`/search/${this.search}`)
             this.resetValues()
         },
-        handelLogOut() {
+        handleLogOut() {
             localStorage.removeItem('jwt')
             this.$router.push('/signin')
             this.resetValues()

@@ -16,7 +16,7 @@ export default {
     Background,
     NavigationBar
   },
-  computed: {
+  methods: {
     isNotSignInOrSignUpPage() {
       if(this.$route.name !== 'signin' && this.$route.name !== 'signup'){
         return true;
@@ -29,7 +29,7 @@ export default {
 
 <style>
 #app {
-  font-family: Strait !important;
+  font-family: Strait, sans-serif !important;
 }
 
 .sign-in-or-up-page{
