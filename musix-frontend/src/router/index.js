@@ -102,11 +102,12 @@ const router = createRouter({
 
 //Check before entering page
 router.beforeEach(async (to, from, next) => {
+    const jwt = localStorage.getItem("jwt")
 
     //Check JWT expiration
-    if(localStorage.getItem('jwt') != null){
+    if(jwt != null){
         try{
-            const claims = JwtUtil.parseJwt(localStorage.getItem("jwt"))
+            const claims = JwtUtil.parseJwt(jwt)
             const isExpired = JwtUtil.checkExpiration(claims["exp"])
     
             if(isExpired){
@@ -120,7 +121,7 @@ router.beforeEach(async (to, from, next) => {
 
     //AuthenticationState
     if (to.matched.some(record => record.meta.requiresAuth)) {
-      if (localStorage.getItem('jwt') == null) {
+      if (jwt == null) {
         next({
           name: 'signin',
           params: { nextUrl: to.fullPath }
@@ -132,7 +133,7 @@ router.beforeEach(async (to, from, next) => {
       }
     } 
     else if (to.matched.some(record => record.meta.guest)) {
-      if (localStorage.getItem('jwt') == null) {
+      if (jwt == null) {
         next()
       } 
       else {
