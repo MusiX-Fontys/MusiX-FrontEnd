@@ -9,7 +9,6 @@
                 <label id="title">{{ user.username }}</label>
                 <button v-if="!ownProfile && !following" id="follow" @click="followUser()">Follow</button>
                 <button v-if="!ownProfile && following" id="unfollow" @click="unfollowUser()">Unfollow</button>
-                <!-- <label id="join-date">Joined On: {{ user.joinDate.substring(0, user.joinDate.indexOf("T")) }}</label> -->
             </div>
         </div>
         <div v-if="artists.length && albums.length && tracks.length">
