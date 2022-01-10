@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import Navigationbar from '../../src/components/Navigationbar.vue'
+import Navigationbar from '../../src/components/NavigationBar.vue'
 import Background from '../../src/components/Background.vue'
 import App from '../../src/App.vue'
 import router from '../../src/router/index'
