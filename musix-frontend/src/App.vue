@@ -29,7 +29,7 @@ export default {
 
 <style>
 #app {
-  font-family: Strait !important;
+  font-family: Strait, sans-serif !important;
 }
 
 .sign-in-or-up-page{
