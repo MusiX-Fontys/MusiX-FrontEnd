@@ -16,7 +16,7 @@ export default {
     Background,
     NavigationBar
   },
-  computed: {
+  methods: {
     isNotSignInOrSignUpPage() {
       if(this.$route.name !== 'signin' && this.$route.name !== 'signup'){
         return true;

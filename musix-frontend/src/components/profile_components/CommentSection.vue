@@ -33,7 +33,6 @@ export default {
     methods: {
         setComments(){
             this.currentComments = this.comments
-            console.log(this.currentComments)
         },
         redirectToProfile(id){
             this.$router.push(`/profile/${id}`)

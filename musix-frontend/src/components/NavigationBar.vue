@@ -8,12 +8,12 @@
             <h1 class="title">MusiX</h1>
         </div>
         <div class="nav-side">
-            <form @submit="handleSearch">
+            <form @submit.prevent="handleSearch">
                 <input class="search" v-model="search" placeholder="Search..."/>
             </form>
             <div v-if="isUserLoggedIn()">
                 <label class="nav-option" @click="redirectToPage(`/profile/${getUserId()}`)">Profile</label>
-                <label class="nav-option" @click="handelLogOut()">Log Out</label>
+                <label class="nav-option" @click="handleLogOut()">Log Out</label>
             </div>
             <div v-else>
                 <label class="nav-option" @click="redirectToPage('/signin')">Sign In</label>
@@ -43,13 +43,11 @@ export default {
             const claims = JwtUtil.parseJwt(jwt)
             return claims.sub
         },
-        handleSearch(e){
-            e.preventDefault()
-
+        handleSearch(){
             this.$router.push(`/search/${this.search}`)
             this.resetValues()
         },
-        handelLogOut() {
+        handleLogOut() {
             localStorage.removeItem('jwt')
             this.$router.push('/signin')
             this.resetValues()

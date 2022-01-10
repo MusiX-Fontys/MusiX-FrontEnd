@@ -15,6 +15,8 @@ import AuthorizationPage from '../pages/AuthorizationPage'
 import spotify from '../wrappers/SpotifyAuthenticationWrapper'
 import scrobble from '../wrappers/ScrobbleWrapper'
 
+import JwtUtil from "../utils/JwtUtil"
+
 //Define Routes
 const routes = [
     {
@@ -104,8 +106,8 @@ router.beforeEach(async (to, from, next) => {
     //Check JWT expiration
     if(localStorage.getItem('jwt') != null){
         try{
-            const claims = parseJwt(localStorage.getItem("jwt"))
-            const isExpired = checkExpiration(claims["exp"])
+            const claims = JwtUtil.parseJwt(localStorage.getItem("jwt"))
+            const isExpired = JwtUtil.checkExpiration(claims["exp"])
     
             if(isExpired){
               localStorage.removeItem("jwt")
@@ -143,7 +145,7 @@ router.beforeEach(async (to, from, next) => {
 
     //Check Spotify expiration
     if(await spotify.hasUserSetUpSpotifyConnection() && to.name !== 'authorized'){
-        const isExpired = checkExpiration(localStorage.getItem('exp_time'))
+        const isExpired = JwtUtil.checkExpiration(localStorage.getItem('exp_time'))
 
         if(isExpired){
             localStorage.removeItem('access_token')
@@ -163,24 +165,5 @@ router.beforeEach(async (to, from, next) => {
         router.push('home')
     }
 })
-
-//Get claims from JWT
-function parseJwt (token) {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-
-  return JSON.parse(jsonPayload);
-}
-
-//Check expiration date of JWT
-function checkExpiration (exp) {
-  const expDate = new Date(exp * 1000)
-  const currentDate = new Date()
-
-  return expDate.getTime() <= currentDate.getTime();
-}
 
 export default router
